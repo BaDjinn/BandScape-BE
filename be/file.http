@@ -1,0 +1,82 @@
+GET http://localhost:5050/
+
+####
+
+GET http://localhost:5050/posts
+
+
+####
+
+POST http://localhost:5050/posts/create HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "Magicabula",
+    "category": "Libri per bambini",
+    "author": "6537d37346e5ca6629f1d7b9",
+    "rate": 4.5,
+    "cover": "https://static01.nyt.com/newsgraphics/2020/04/28/stephen-king-guide/assets/images/petsematary-2000.jpg",
+    "content": "Bel libro non mi lamento",
+    "readTime":{"value":15, "unit":"Minutes"}
+}
+
+####
+
+
+DELETE http://localhost:5050/posts/delete/6515cd193c4663e31fe13536 HTTP/1.1
+
+####
+
+POST http://localhost:5050/users/create HTTP/1.1
+Content-Type: application/json
+
+{
+    "name":"Pierpaolo",
+    "email":"pierpaoloRossi@gmail.com",
+    "password":"Assistenza23!",
+    "role":"passante"
+}
+
+
+
+####
+GET  http://localhost:5050/posts?pageSize=1&page=3
+
+
+####
+POST http://localhost:5050/users/create HTTP/1.1
+Content-Type: application/json
+
+{
+"email":"gigidegigis@hotmail.com",
+"name":"Gigi",
+"password":"gigi",
+"role":"Utente",
+"usrImg" : "https://res.cloudinary.com/dhknlp2bn/image/upload/v1697897339/postsImage/rrsxwdepskxp3smypy78.png"
+}
+
+####
+POST http://localhost:5050/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+"email":"alessandropoz@hotmail.com",
+"password":"alessfffandro"
+}
+
+####
+POST http://localhost:5050/comment/create HTTP/1.1
+Content-Type: application/json
+
+{
+    "authorID":"6533fcc20eff6c822bdb3eb7",
+    "postID":"652a9a3f2d80cb6b3d652752",
+    "content":"Marcondirondiro commento"
+}
+
+####
+GET  http://localhost:5050/comment/byArticle?articleID=652a9a3f2d80cb6b3d652752 HTTP/1.1
+
+
+###
+GET  http://localhost:5050/post/byAuthor/6537d37346e5ca6629f1d7b9 HTTP/1.1
