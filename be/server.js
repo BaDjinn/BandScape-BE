@@ -44,7 +44,7 @@ mongoose.connect(process.env.REACT_APP_MONGOOSESERVERCONNECTION, {
 //lancio la connessione con il db di moongoose
 const db = mongoose.connection;
 // db.on  vuol dire, ogni volta che
-db.on("error", console.error.bind(console, `Error during DB connec--`));
+db.on("error", console.error.bind(console, `!!!Error during DB connec--!!!`));
 // db.once vuol dire, una volta che
 db.once("open", () => {
 	const now = new Date();
