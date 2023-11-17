@@ -10,6 +10,11 @@ const PORT = process.env.REACT_APP_SERVERPORT;
 
 // Aggiungo le rotte
 //const userRoute = require("./routes/userRoute");
+const commentRoutes = require("./routes/commentRoutes");
+const loginRoutes = require("./routes/loginRoute");
+const postRoute = require("./routes/postRoute");
+const userRoute = require("./routes/userRoute");
+const verifyRoute = require("./routes/verifyRoute");
 
 //Importo eventuali middlewares
 //const logger = require("../middlewares/logger");

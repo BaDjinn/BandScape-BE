@@ -16,7 +16,6 @@ const UsersSchema = new mongoose.Schema(
 				"Please fill a valid email address",
 			],
 		},
-
 		isAdmin: {
 			type: Boolean,
 			required: false,
@@ -32,12 +31,16 @@ const UsersSchema = new mongoose.Schema(
 				"Password must be longer than 8 characters, and contain at least one Capital letter, one number and one special symbol.",
 			],
 		},
-
 		usrImg: {
 			type: String,
 			required: false,
 			default:
 				"https://static.vecteezy.com/ti/vettori-gratis/p1/2318271-icona-profilo-utente-vettoriale.jpg",
+		},
+		usrBio: {
+			type: String,
+			required: false,
+			default: "",
 		},
 	},
 	//gli metto le options roba da guardare in documentazione

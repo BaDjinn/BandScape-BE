@@ -48,10 +48,11 @@ user.get("/user/extAccess/:externalID", async (req, res) => {
 		const token = jwt.sign(
 			{
 				id: user._id,
+				nick: user.nick,
 				email: user.email,
-				role: user.role,
+				isAdmin: user.isAdmin,
 				usrImg: user.usrImg,
-				name: user.name,
+				usrBio: user.usrBio,
 			},
 			process.env.JWT_CODICESEGRETO //codice segreto preso da var ambiente
 		);
@@ -79,10 +80,11 @@ user.post("/users/login", async (req, res) => {
 			const token = jwt.sign(
 				{
 					id: user._id,
+					nick: user.nick,
 					email: user.email,
-					role: user.role,
+					isAdmin: user.isAdmin,
 					usrImg: user.usrImg,
-					name: user.name,
+					usrBio: user.usrBio,
 				},
 				process.env.JWT_CODICESEGRETO //codice segreto preso da var ambiente
 			);
@@ -128,10 +130,12 @@ user.post("/users/create", async (req, res) => {
 
 	// creo l'oggetto user partendo da quello che vedo nella req
 	let userData = {
-		name: req.body.name,
+		nick: req.body.nick,
 		email: req.body.email,
+		isAdmin: req.body.isAdmin,
 		password: hashedPassword,
-		role: req.body.role,
+		usrImg: req.body.usrImg,
+		usrBio: req.body.usrBio,
 	};
 
 	if (req.body.usrImg) {
@@ -146,16 +150,16 @@ user.post("/users/create", async (req, res) => {
 	console.log(newUser);
 	try {
 		// ora mando i dati al database
-		// usando il metodo .save che è il metodo mongoose per salvare i dati
-		// si scrive proprio così
+
 		const user = await newUser.save();
 		const token = jwt.sign(
 			{
-				id: newUser._id,
-				email: newUser.email,
-				role: newUser.role,
-				usrImg: newUser.usrImg,
-				name: newUser.name,
+				id: user._id,
+				nick: user.nick,
+				email: user.email,
+				isAdmin: user.isAdmin,
+				usrImg: user.usrImg,
+				usrBio: user.usrBio,
 			},
 			process.env.JWT_CODICESEGRETO //codice segreto preso da var ambiente
 		);
@@ -184,7 +188,6 @@ user.patch("/users/update/:userID", async (req, res) => {
 		const userExist = await userModel.findByIdAndUpdate(userID, dataToUpdate, {
 			new: true,
 		});
-		// se non trova niente restituisce un falsy
 		if (!userExist) {
 			return res.status(404).send({
 				statuscode: 404,
@@ -194,10 +197,11 @@ user.patch("/users/update/:userID", async (req, res) => {
 		const token = jwt.sign(
 			{
 				id: userExist._id,
+				nick: userExist.nick,
 				email: userExist.email,
-				role: userExist.role,
+				isAdmin: userExist.isAdmin,
 				usrImg: userExist.usrImg,
-				name: userExist.name,
+				usrBio: userExist.usrBio,
 			},
 			process.env.JWT_CODICESEGRETO //codice segreto preso da var ambiente
 		);
@@ -209,9 +213,30 @@ user.patch("/users/update/:userID", async (req, res) => {
 	} catch (error) {
 		res.status(500).send({
 			statusCode: 500,
-			message:
-				"Non sono riuscito ad aggiornare l'utente con id ${userID} non esiste",
+			message: `Non sono riuscito ad aggiornare l'utente con id ${userID} non esiste`,
 			error: error,
+		});
+	}
+});
+
+user.delete("/users/delete/:userID", async (req, res) => {
+	const { userID } = req.params;
+	try {
+		const delUser = await userModel.findByIdAndDelete(userID);
+		if (!delUser) {
+			return res.status(404).send({
+				statusCode: 404,
+				message: "Post not found or already deleted!",
+			});
+		}
+		res.status(200).send({
+			statusCode: 200,
+			message: "Post deleted suxxesfully",
+		});
+	} catch (error) {
+		res.status(500).send({
+			statusCode: 500,
+			message: "Errore interno del server",
 		});
 	}
 });
