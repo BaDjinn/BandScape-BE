@@ -7,38 +7,47 @@ const bcrypt = require("bcrypt");
 const userModel = require("../models/userModel");
 
 login.post("/login", async (req, res) => {
-  const user = await userModel.findOne({ email: req.body.email });
-  if (!user) {
-    res.status(404).send({
-      statusCode: 404,
-      message: "Utente non trovato",
-    });
-  }
-  //confronto la pass del req con quella a dtyb entrambe decritpo
-  const validPassword = await bcrypt.compare(req.body.password, user.password);
-  if (!validPassword) {
-    res.status(401).send({
-      status: 401,
-      message: "Password o login non valida",
-    });
-  }
+	try {
+		const user = await userModel.findOne({ email: req.body.email });
+		if (!user) {
+			res.status(404).send({
+				statusCode: 404,
+				message: "Utente non trovato",
+			});
+		}
+	} catch (error) {
+		res.status(500).send({
+			statusCode: 500,
+			message: "Errore interno del server",
+		});
+	}
 
-  // creo il mio token
-  //il primo parametro è quello che vogliamo criptare dentro il token
-  const token = jwt.sign(
-    {
-      id: user._id,
-      email: user.email,
-      role: user.role,
-    },
-    process.env.JWT_CODICESEGRETO, //codice segreto preso da var ambiente
-    {
-      expiresIn: "1h", //tempo di expires posso metterlo anche in millisec numerici
-    }
-  );
+	//confronto la pass del req con quella a dtyb entrambe decritpo
+	const validPassword = await bcrypt.compare(req.body.password, user.password);
+	if (!validPassword) {
+		res.status(401).send({
+			status: 401,
+			message: "Password o login non valida",
+		});
+	}
 
-  res.header("Authorization", token).status(200).send({
-    message: "Login effettuato con successo",
-    token,
-  });
+	// creo il mio token
+	//il primo parametro è quello che vogliamo criptare dentro il token
+	const token = jwt.sign(
+		{
+			id: user._id,
+			email: user.email,
+			isAdmin: user.isAdmin,
+		},
+		process.env.JWT_CODICESEGRETO, //codice segreto preso da var ambiente
+		{
+			expiresIn: "1h", //tempo di expires posso metterlo anche in millisec numerici
+		}
+	);
+
+	res.header("Authorization", token).status(200).send({
+		message: "Login effettuato con successo",
+		token,
+		user,
+	});
 });

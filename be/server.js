@@ -18,6 +18,7 @@ const verifyRoute = require("./routes/verifyRoute");
 
 //Importo eventuali middlewares
 //const logger = require("../middlewares/logger");
+const validatePost = require("./middlewares/validatePost");
 
 //inizializzo app/express
 const app = express();
@@ -29,9 +30,9 @@ app.use(cors());
 /*app.use("/", userRoute);*/
 app.use("/", commentRoutes);
 app.use("/", loginRoutes);
-app.use("/", postRoute);
-app.use("/", userRoute);
-app.use("/", verifyRoute);
+//app.use("/", postRoute);
+//app.use("/", userRoute);
+//app.use("/", verifyRoute);
 
 //creo la risposta per la root principale
 app.get("/", (req, res) => {
