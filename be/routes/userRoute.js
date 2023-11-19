@@ -40,7 +40,7 @@ user.get("/users", async (req, res) => {
 // user.post è un metodo di express.Router, si scrive proprio così
 // alla peggio dai un occhio alla documentazione
 
-user.get("/user/extAccess/:externalID", async (req, res) => {
+user.get("/users/extAccess/:externalID", async (req, res) => {
 	const { externalID } = req.params;
 
 	const user = await userModel.findOne({ externalID: externalID });
