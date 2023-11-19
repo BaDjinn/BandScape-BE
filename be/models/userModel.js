@@ -26,10 +26,6 @@ const UsersSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 			unique: false,
-			match: [
-				/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/,
-				"Password must be longer than 8 characters, and contain at least one Capital letter, one number and one special symbol.",
-			],
 		},
 		usrImg: {
 			type: String,
