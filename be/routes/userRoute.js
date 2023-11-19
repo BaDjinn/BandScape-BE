@@ -57,12 +57,12 @@ user.get("/user/extAccess/:externalID", async (req, res) => {
 			process.env.JWT_CODICESEGRETO //codice segreto preso da var ambiente
 		);
 		return res.status(200).send({
-			status: 200,
+			statusCode: 200,
 			token: token,
 		});
 	} else {
 		return res.status(401).send({
-			status: 401,
+			statusCode: 401,
 			message: "Utente non trovato",
 		});
 	}
