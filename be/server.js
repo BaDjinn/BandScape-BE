@@ -14,7 +14,7 @@ const commentRoutes = require("./routes/commentRoutes");
 const loginRoutes = require("./routes/loginRoute");
 const postRoute = require("./routes/postRoute");
 const userRoute = require("./routes/userRoute");
-const verifyRoute = require("./routes/verifyRoute");
+const verifyTokenRoute = require("./routes/verifyRoute");
 
 //Importo eventuali middlewares
 //const logger = require("../middlewares/logger");
@@ -30,9 +30,9 @@ app.use(cors());
 /*app.use("/", userRoute);*/
 app.use("/", commentRoutes);
 app.use("/", loginRoutes);
-//app.use("/", postRoute);
-//app.use("/", userRoute);
-//app.use("/", verifyRoute);
+app.use("/", postRoute);
+app.use("/", userRoute);
+app.use("/", verifyTokenRoute);
 
 //creo la risposta per la root principale
 app.get("/", (req, res) => {

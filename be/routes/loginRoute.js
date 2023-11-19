@@ -15,39 +15,44 @@ login.post("/login", async (req, res) => {
 				message: "Utente non trovato",
 			});
 		}
+
+		//confronto la pass del req con quella a dtyb entrambe decritpo
+		const validPassword = await bcrypt.compare(
+			req.body.password,
+			user.password
+		);
+		if (!validPassword) {
+			res.status(401).send({
+				status: 401,
+				message: "Password o login non valida",
+			});
+		}
+
+		// creo il mio token
+		//il primo parametro è quello che vogliamo criptare dentro il token
+		const token = jwt.sign(
+			{
+				id: user._id,
+				email: user.email,
+				isAdmin: user.isAdmin,
+			},
+			process.env.JWT_CODICESEGRETO, //codice segreto preso da var ambiente
+			{
+				expiresIn: "1h", //tempo di expires posso metterlo anche in millisec numerici
+			}
+		);
+
+		res.header("Authorization", token).status(200).send({
+			message: "Login effettuato con successo",
+			token,
+			user,
+		});
 	} catch (error) {
 		res.status(500).send({
 			statusCode: 500,
 			message: "Errore interno del server",
 		});
 	}
-
-	//confronto la pass del req con quella a dtyb entrambe decritpo
-	const validPassword = await bcrypt.compare(req.body.password, user.password);
-	if (!validPassword) {
-		res.status(401).send({
-			status: 401,
-			message: "Password o login non valida",
-		});
-	}
-
-	// creo il mio token
-	//il primo parametro è quello che vogliamo criptare dentro il token
-	const token = jwt.sign(
-		{
-			id: user._id,
-			email: user.email,
-			isAdmin: user.isAdmin,
-		},
-		process.env.JWT_CODICESEGRETO, //codice segreto preso da var ambiente
-		{
-			expiresIn: "1h", //tempo di expires posso metterlo anche in millisec numerici
-		}
-	);
-
-	res.header("Authorization", token).status(200).send({
-		message: "Login effettuato con successo",
-		token,
-		user,
-	});
 });
+
+module.exports = login;
