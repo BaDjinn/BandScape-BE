@@ -251,15 +251,6 @@ posts.post("/posts/create", validatePost, async (req, res) => {
 posts.patch("/posts/update/:postId", async (req, res) => {
 	const { postId } = req.params;
 
-	const postExist = await PostModel.findById(postId);
-
-	if (!postExist) {
-		return res.status(404).send({
-			statusCode: 404,
-			message: "This post does not exist!",
-		});
-	}
-
 	try {
 		const dataToUpdate = req.body;
 		const options = { new: true };
@@ -268,6 +259,12 @@ posts.patch("/posts/update/:postId", async (req, res) => {
 			dataToUpdate,
 			options
 		);
+		if (!postExist) {
+			return res.status(404).send({
+				statusCode: 404,
+				message: "This post does not exist!",
+			});
+		}
 
 		res.status(200).send({
 			statusCode: 200,
