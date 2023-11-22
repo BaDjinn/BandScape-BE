@@ -8,8 +8,8 @@ const comment = express.Router();
 //faccio la get per titolo con la query
 //chiaramente devi chiamare questa route per fare il "filtro" per titolo
 //lato frontend scriverò una cosa del genere  `http://localhost:5050/comment?=`
-comment.get("/comment", async (req, res) => {
-	const { articleID } = req.query;
+comment.get("/comment/:articleID", async (req, res) => {
+	const { articleID } = req.params;
 
 	try {
 		const comment = await commentModel
