@@ -208,7 +208,7 @@ user.patch("/users/update/:userID", async (req, res) => {
 		return res.status(200).send({
 			statuscode: 200,
 			message: `I dati sono stati aggiornati`,
-			token: token,
+			user: userExist,
 		});
 	} catch (error) {
 		res.status(500).send({

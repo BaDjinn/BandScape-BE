@@ -80,3 +80,10 @@ GET  http://localhost:5050/comment/byArticle?articleID=652a9a3f2d80cb6b3d652752 
 
 ###
 GET  http://localhost:5050/post/byAuthor/6537d37346e5ca6629f1d7b9 HTTP/1.1
+
+####
+GET https://bandscapebe-srv.onrender.com/users HTTP/1.1
+
+####
+GET https://bandscapebe-srv.onrender.com/posts HTTP/1.1
+
