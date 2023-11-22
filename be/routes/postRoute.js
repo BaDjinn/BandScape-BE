@@ -123,12 +123,21 @@ posts.get("/posts", async (req, res) => {
 });
 
 //get single post
-posts.get("post/byid/:postID", async (req, res) => {
+posts.get("post/:postID", async (req, res) => {
 	const { postID } = req.params;
 	try {
 		const postByID = await PostModel.findById(postID).populate("author");
+		if (!postByID) {
+			return res.status(404).send({
+				statusCode: 404,
+				message: "post not found",
+			});
+		}
 		console.log(postByID);
-		res.status(200).send(postByID);
+		res.status(200).send({
+			statusCode: 200,
+			postByID,
+		});
 	} catch (error) {
 		res.status(400).send({
 			status: 400,
@@ -160,7 +169,7 @@ posts.get("/posts/bytitle", async (req, res) => {
 });
 
 //lato frontend scriverò una cosa del genere  `http://localhost:5050/posts/bydate?date=nomedeltitolo`
-posts.get("/posts/bydate/:date", async (req, res) => {
+/*posts.get("/posts/bydate/:date", async (req, res) => {
 	const { date } = req.params;
 
 	try {
@@ -211,7 +220,7 @@ posts.get("/posts/byid/:id", async (req, res) => {
 			post,
 		});
 	} catch (e) {}
-});
+});*/
 
 //creazione del Post
 posts.post("/posts/create", validatePost, async (req, res) => {
@@ -224,7 +233,7 @@ posts.post("/posts/create", validatePost, async (req, res) => {
 
 	try {
 		const post = await newPost.save();
-
+		//implement same-title-stop
 		res.status(201).send({
 			statusCode: 201,
 			message: "Post saved successfully",
