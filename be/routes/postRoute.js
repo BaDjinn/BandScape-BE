@@ -259,7 +259,7 @@ posts.patch("/posts/update/:postId", async (req, res) => {
 			dataToUpdate,
 			options
 		);
-		if (!postExist) {
+		if (!result) {
 			return res.status(404).send({
 				statusCode: 404,
 				message: "This post does not exist!",
