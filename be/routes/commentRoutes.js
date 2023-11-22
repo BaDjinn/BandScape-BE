@@ -1,5 +1,5 @@
 const express = require("express");
-const commentsModel = require("../models/commentsModel");
+const commentModel = require("../models/commentsModel");
 
 //const validatePost = require("../middlewares/validatePost");
 
@@ -7,20 +7,20 @@ const comment = express.Router();
 
 //faccio la get per titolo con la query
 //chiaramente devi chiamare questa route per fare il "filtro" per titolo
-//lato frontend scriverò una cosa del genere  `http://localhost:5050/posts/bytitle?articleID=nomedeltitolo`
+//lato frontend scriverò una cosa del genere  `http://localhost:5050/comment?=`
 comment.get("/comment", async (req, res) => {
 	const { articleID } = req.query;
 
 	try {
-		const postByTitle = await commentModel
+		const comment = await commentModel
 			.find({
-				postID: articleID,
+				postFather: articleID,
 			})
-			.populate("authorID");
+			.populate("author");
 
 		res.status(200).send({
 			statusCode: 200,
-			postByTitle,
+			comment,
 		});
 	} catch (e) {
 		res.status(500).send({
@@ -33,8 +33,8 @@ comment.get("/comment", async (req, res) => {
 //creazione del Post
 comment.post("/comment", async (req, res) => {
 	const newComment = new commentModel({
-		authorID: req.body.authorID,
-		postID: req.body.postID,
+		author: req.body.author,
+		postFather: req.body.postFather,
 		content: req.body.content,
 	});
 
@@ -65,7 +65,7 @@ comment.patch("/comment/:commentId", async (req, res) => {
 			message: "This post does not exist!",
 		});
 	}
-	const verifyAuthor = postExist.authorID === req.body.authorID;
+	const verifyAuthor = postExist.author === req.body.authorID;
 	if (verifyAuthor) {
 		try {
 			const dataToUpdate = req.body;
@@ -95,7 +95,7 @@ comment.patch("/comment/:commentId", async (req, res) => {
 	}
 });
 
-comment.delete("/comment:commentID", async (req, res) => {
+comment.delete("/comment/:commentID", async (req, res) => {
 	const { commentID } = req.params;
 
 	try {
