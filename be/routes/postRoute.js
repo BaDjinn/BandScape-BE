@@ -40,10 +40,16 @@ posts.post(
 	cloudUpload.single("cover"),
 	async (req, res) => {
 		try {
-			res.status(200).json({ cover: req.file.path });
+			res.status(200).json({
+				statusCode: 200,
+				cover: req.file.path,
+			});
 		} catch (error) {
-			res.status(500);
-			console.log("Errore in upload file");
+			res.status(500).send({
+				statusCode: 500,
+				message: `Upload a cloudStorage fallito`,
+				error: error,
+			});
 		}
 	}
 );
