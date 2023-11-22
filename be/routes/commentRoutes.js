@@ -8,7 +8,7 @@ const comment = express.Router();
 //faccio la get per titolo con la query
 //chiaramente devi chiamare questa route per fare il "filtro" per titolo
 //lato frontend scriverò una cosa del genere  `http://localhost:5050/posts/bytitle?articleID=nomedeltitolo`
-comment.get("/comment/byArticle", async (req, res) => {
+comment.get("/comment", async (req, res) => {
 	const { articleID } = req.query;
 
 	try {
@@ -18,7 +18,10 @@ comment.get("/comment/byArticle", async (req, res) => {
 			})
 			.populate("authorID");
 
-		res.status(200).send(postByTitle);
+		res.status(200).send({
+			statusCode: 200,
+			postByTitle,
+		});
 	} catch (e) {
 		res.status(500).send({
 			statusCode: 500,
@@ -28,7 +31,7 @@ comment.get("/comment/byArticle", async (req, res) => {
 });
 
 //creazione del Post
-comment.post("/comment/create", async (req, res) => {
+comment.post("/comment", async (req, res) => {
 	const newComment = new commentModel({
 		authorID: req.body.authorID,
 		postID: req.body.postID,
@@ -51,7 +54,7 @@ comment.post("/comment/create", async (req, res) => {
 	}
 });
 
-comment.patch("/comment/update/:commentId", async (req, res) => {
+comment.patch("/comment/:commentId", async (req, res) => {
 	const { commentId } = req.params;
 
 	const postExist = await PostModel.findById(postId);
@@ -92,7 +95,7 @@ comment.patch("/comment/update/:commentId", async (req, res) => {
 	}
 });
 
-comment.delete("/comment/delete/:commentID", async (req, res) => {
+comment.delete("/comment:commentID", async (req, res) => {
 	const { commentID } = req.params;
 
 	try {
