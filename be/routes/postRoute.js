@@ -103,11 +103,17 @@ posts.post(
 //i eventuali dati per il pagination potrai anche passarglieli tu lato frontend
 //page e pageSize al momento settano un Default
 //ma se glieli passi da frontend come params hai risolto
+//recupero le informazioni per l'impaginazione
+
+const get_page_post = process.env.GET_PAGE_POST;
+const get_pageSize_post = process.env.GET_PAGESIZE_POST;
+
 posts.get("/posts", async (req, res) => {
-	const { page = 1, pageSize = 3 } = req.query;
+	const { page = get_page_post, pageSize = get_pageSize_post } = req.query;
 	try {
 		const posts = await PostModel.find()
 			.populate("author")
+			.sort({ updatedAt: -1 })
 			.limit(pageSize)
 			.skip((page - 1) * pageSize);
 
